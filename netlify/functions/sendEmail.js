@@ -1,27 +1,43 @@
-import nodemailer from "nodemailer";
+const nodemailer = require("nodemailer");
 
-export const handler = async (event) => {
+exports.handler = async (event) => {
   try {
-    const { recipientEmail, senderName, messageId } = JSON.parse(event.body);
+    const { id, senderName, senderEmail, recipientEmail } = JSON.parse(event.body);
 
-    const transporter = nodemailer.createTransport({
+    // Setup Nodemailer transporter (Use your own credentials)
+    let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "crash0ut.inc.na@gmail.com",
-        pass: "Immanuel_6",
+        user: process.env.EMAIL_USER, // Your Gmail address
+        pass: process.env.EMAIL_PASS, // Your Gmail App Password
       },
     });
 
+    // Email Content
     const mailOptions = {
-      from: "crash0ut.inc.na@gmail.com",
+      from: `"${senderName}" <${senderEmail}>`,
       to: recipientEmail,
-      subject: `You've received a message from ${senderName}`,
-      html: `<p>${senderName} has sent you a message. Click <a href="https://your-app.netlify.app/${messageId}">here</a> to view it.</p>`,
+      subject: "You've received a new message!",
+      html: `
+        <p>Hi,</p>
+        <p>${senderName} has sent you a special message. Click the link below to view it:</p>
+        <p><a href="https://your-app.netlify.app/message/${id}">Open Message</a></p>
+        <p>Best regards,<br/>Your Message App</p>
+      `,
     };
 
+    // Send Email
     await transporter.sendMail(mailOptions);
-    return { statusCode: 200, body: JSON.stringify({ success: true }) };
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ message: "Email sent successfully!" }),
+    };
   } catch (error) {
-    return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
+    console.error("Email sending error:", error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "Failed to send email." }),
+    };
   }
 };

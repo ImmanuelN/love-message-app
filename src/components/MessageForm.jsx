@@ -1,53 +1,70 @@
-import { useState } from "react";
-import { db, collection, addDoc } from "../lib/firebase";
+import React, { useState } from "react";
+import { db, collection, addDoc } from "./firebaseConfig";
 
-export default function MessageForm() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [recipientEmail, setRecipientEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+const MessageForm = () => {
+  const [formData, setFormData] = useState({
+    senderName: "",
+    senderEmail: "",
+    recipientEmail: "",
+    message: "",
+  });
 
-  const sendMessage = async () => {
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
     try {
-      setIsLoading(true);
+      // Step 1: Store message in Firestore
       const docRef = await addDoc(collection(db, "messages"), {
-        name,
-        email,
-        recipientEmail,
-        message,
-        createdAt: new Date(),
+        ...formData,
+        timestamp: new Date(),
       });
 
-      await fetch("/.netlify/functions/sendEmail", {
+      console.log("Message stored with ID:", docRef.id);
+
+      // Step 2: Call Netlify function to send the email
+      const response = await fetch("/.netlify/functions/sendEmail", {
         method: "POST",
-        body: JSON.stringify({
-          recipientEmail,
-          senderName: name,
-          messageId: docRef.id,
-        }),
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: docRef.id, // Message ID for retrieval
+          senderName: formData.senderName,
+          senderEmail: formData.senderEmail,
+          recipientEmail: formData.recipientEmail,
+        }),
       });
 
-      alert("Message sent successfully!");
-      setName(""); setEmail(""); setRecipientEmail(""); setMessage("");
+      const result = await response.json();
+      if (response.ok) {
+        alert("Message sent successfully!");
+      } else {
+        alert("Failed to send email: " + result.error);
+      }
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("Error:", error);
+      alert("Something went wrong.");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
-    <div className="message-form">
-      <h2>Send a Loving Message</h2>
-      <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your Name" required />
-      <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Your Email" required />
-      <input value={recipientEmail} onChange={(e) => setRecipientEmail(e.target.value)} placeholder="Recipient's Email" required />
-      <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Write your message..." required />
-      <button onClick={sendMessage} disabled={isLoading}>
-        {isLoading ? "Sending..." : "Send"}
+    <form onSubmit={handleSubmit}>
+      <input type="text" name="senderName" placeholder="Your Name" onChange={handleChange} required />
+      <input type="email" name="senderEmail" placeholder="Your Email" onChange={handleChange} required />
+      <input type="email" name="recipientEmail" placeholder="Recipient Email" onChange={handleChange} required />
+      <textarea name="message" placeholder="Your message" onChange={handleChange} required />
+      <button type="submit" disabled={loading}>
+        {loading ? "Sending..." : "Send Message"}
       </button>
-    </div>
+    </form>
   );
-}
+};
+
+export default MessageForm;
