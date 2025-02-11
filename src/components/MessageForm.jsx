@@ -37,6 +37,7 @@ const MessageForm = () => {
           senderName: formData.senderName,
           senderEmail: formData.senderEmail,
           recipientEmail: formData.recipientEmail,
+          message: formData.message,
         }),
       });
 
