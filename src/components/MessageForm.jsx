@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { db, collection, addDoc } from "./firebaseConfig";
+import { db, collection, addDoc } from "../lib/firebase";
 
 const MessageForm = () => {
   const [formData, setFormData] = useState({
