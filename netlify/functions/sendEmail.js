@@ -2,42 +2,47 @@ const nodemailer = require("nodemailer");
 
 exports.handler = async (event) => {
   try {
-    const { id, senderName, senderEmail, recipientEmail } = JSON.parse(event.body);
+    const { recipientEmail, senderName, message } = JSON.parse(event.body);
 
-    // Setup Nodemailer transporter (Use your own credentials)
-    let transporter = nodemailer.createTransport({
-      service: "gmail",
+    // Check for missing fields
+    if (!recipientEmail || !senderName || !message) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: "Missing required fields" }),
+      };
+    }
+
+    // Create transporter using environment variables
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: process.env.SMTP_PORT == 465, // true for 465, false for 587
       auth: {
-        user: process.env.EMAIL_USER, // Your Gmail address
-        pass: process.env.EMAIL_PASS, // Your Gmail App Password
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
       },
     });
 
-    // Email Content
+    // Email options
     const mailOptions = {
-      from: `"${senderName}" <${senderEmail}>`,
+      from: `"${senderName}" <${process.env.SMTP_USER}>`,
       to: recipientEmail,
-      subject: "You've received a new message!",
-      html: `
-        <p>Hi,</p>
-        <p>${senderName} has sent you a special message. Click the link below to view it:</p>
-        <p><a href="https://your-app.netlify.app/message/${id}">Open Message</a></p>
-        <p>Best regards,<br/>Your Message App</p>
-      `,
+      subject: "You’ve Received a Loving Message! ❤️",
+      text: message,
     };
 
-    // Send Email
+    // Send email
     await transporter.sendMail(mailOptions);
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: "Email sent successfully!" }),
+      body: JSON.stringify({ success: "Email sent successfully!" }),
     };
   } catch (error) {
     console.error("Email sending error:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Failed to send email." }),
+      body: JSON.stringify({ error: "Failed to send email" }),
     };
   }
 };
