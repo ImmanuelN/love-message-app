@@ -27,9 +27,9 @@ exports.handler = async (event) => {
     const mailOptions = {
       from: `"${senderName}" <${process.env.SMTP_USER}>`,
       to: recipientEmail,
-      subject: `You’ve Received a Loving Message! from ${senderName}❤️`,
-      text: `You received a message from <strong>${senderName}</strong>.</p>
-      <a href="https://crash0ut-mail-app.netlify.app/${id}" target="_blank">Click here to view it</a>`,
+      subject: `You’ve Received a Loving Message! from ${senderName} ❤️`,
+      text: `You received a message from ${senderName}.</p>
+      https://crash0ut-mail-app.netlify.app/${id} Click the link to view it`,
     };
     
 
