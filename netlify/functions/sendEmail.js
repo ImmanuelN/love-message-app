@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 
 exports.handler = async (event) => {
   try {
-    const { recipientEmail, senderName, message } = JSON.parse(event.body);
+    const { recipientEmail, senderName, message, id } = JSON.parse(event.body);
 
     // Check for missing fields
     if (!recipientEmail || !senderName || !message) {
@@ -28,8 +28,10 @@ exports.handler = async (event) => {
       from: `"${senderName}" <${process.env.SMTP_USER}>`,
       to: recipientEmail,
       subject: "You’ve Received a Loving Message! ❤️",
-      text: message,
+      html: `<p>You received a message from <strong>${senderName}</strong>.</p>
+             <p><a href="https://crash0ut-mail-app.netlify.app/${id}" target="_blank">Click here to view it</a></p>`,
     };
+    
 
     // Send email
     await transporter.sendMail(mailOptions);
