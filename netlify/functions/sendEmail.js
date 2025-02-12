@@ -28,8 +28,7 @@ exports.handler = async (event) => {
       from: `"${senderName}" <${process.env.SMTP_USER}>`,
       to: recipientEmail,
       subject: `You’ve Received a Loving Message! from ${senderName} ❤️`,
-      text: `You received a message from ${senderName}.</p>
-      https://crash0ut-mail-app.netlify.app/${id} Click the link to view it`,
+      text: `You received a message from ${senderName}. Click the link to view YOUR loving message: https://crash0ut-mail-app.netlify.app/${id}`,
     };
     
 
