@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { db, collection, addDoc } from "../lib/firebase";
+import "./MessageForm.css";
 
 const MessageForm = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ const MessageForm = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,9 +20,9 @@ const MessageForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setSuccess(false);
 
     try {
-      // Step 1: Store message in Firestore
       const docRef = await addDoc(collection(db, "messages"), {
         ...formData,
         timestamp: new Date(),
@@ -28,12 +30,11 @@ const MessageForm = () => {
 
       console.log("Message stored with ID:", docRef.id);
 
-      // Step 2: Call Netlify function to send the email
       const response = await fetch("/.netlify/functions/sendEmail", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id: docRef.id, // Message ID for retrieval
+          id: docRef.id,
           senderName: formData.senderName,
           senderEmail: formData.senderEmail,
           recipientEmail: formData.recipientEmail,
@@ -43,7 +44,8 @@ const MessageForm = () => {
 
       const result = await response.json();
       if (response.ok) {
-        alert("Message sent successfully!");
+        setSuccess(true);
+        setFormData({ senderName: "", senderEmail: "", recipientEmail: "", message: "" });
       } else {
         alert("Failed to send email: " + result.error);
       }
@@ -56,15 +58,46 @@ const MessageForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" name="senderName" placeholder="Your Name" onChange={handleChange} required />
-      <input type="email" name="senderEmail" placeholder="Your Email" onChange={handleChange} required />
-      <input type="email" name="recipientEmail" placeholder="Recipient Email" onChange={handleChange} required />
-      <textarea name="message" placeholder="Your message" onChange={handleChange} required />
-      <button type="submit" disabled={loading}>
-        {loading ? "Sending..." : "Send Message"}
-      </button>
-    </form>
+    <div className="form-container">
+      <h2>Send a Loving Message 💌</h2>
+      <form onSubmit={handleSubmit} className="message-form">
+        <input
+          type="text"
+          name="senderName"
+          placeholder="Your Name"
+          value={formData.senderName}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="email"
+          name="senderEmail"
+          placeholder="Your Email"
+          value={formData.senderEmail}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="email"
+          name="recipientEmail"
+          placeholder="Recipient Email"
+          value={formData.recipientEmail}
+          onChange={handleChange}
+          required
+        />
+        <textarea
+          name="message"
+          placeholder="Your message"
+          value={formData.message}
+          onChange={handleChange}
+          required
+        />
+        <button type="submit" disabled={loading} className="send-button">
+          {loading ? "Sending..." : "Send Message"}
+        </button>
+      </form>
+      {success && <p className="success-message">✅ Message sent successfully!</p>}
+    </div>
   );
 };
 

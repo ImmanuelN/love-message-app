@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { db, doc, getDoc } from "../../lib/firebase";
+import Modal from "../../components/modal/Modal";
 import "./Envelope.css";
 
 export default function EnvelopeView() {
   const { id } = useParams();
   const [isOpened, setIsOpened] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [messageData, setMessageData] = useState({
     senderName: "",
     senderEmail: "",
@@ -21,11 +23,21 @@ export default function EnvelopeView() {
         if (docSnap.exists()) {
           setMessageData(docSnap.data());
         } else {
-          setMessageData({ senderName: "", senderEmail: "", message: "Message not found!" });
+          setMessageData({
+            senderName: "",
+            senderEmail: "",
+            message: "Message not found!",
+          });
         }
       } catch (error) {
         console.error("Error fetching message:", error);
-        setMessageData({ senderName: "", senderEmail: "", message: "Error loading message." });
+        setMessageData({
+          senderName: "",
+          senderEmail: "",
+          message: "Error loading message.",
+        });
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -33,17 +45,40 @@ export default function EnvelopeView() {
   }, [id]);
 
   return (
-    <div className="envelope-container">
-      <div className={`envelope ${isOpened ? "opened" : ""}`}>
-        <div className="flap"></div>
-        {isOpened && (
-          <div className="message-content">
-            <p><strong>From:</strong> {messageData.senderName} ({messageData.senderEmail})</p>
-            <p>{messageData.message}</p>
+    <div className="container">
+      {loading ? (
+        <p className="highlight">Mail incoming...</p>
+      ) : (
+        <>
+          <div className={`valentines ${isOpened ? "disabled" : ""}`}>
+            <div className="envelope" onClick={() => setIsOpened(true)}>
+              <div className="card">
+                <div className="text">
+                  <p>
+                    <strong>From:</strong> {messageData.senderName}
+                  </p>
+                  <p>
+                    {messageData.message.length > 20
+                      ? messageData.message.substring(0, 20) + "..."
+                      : messageData.message}
+                  </p>
+                </div>
+                <div className="heart"></div>
+              </div>
+            </div>
+            <div className="front"></div>
           </div>
-        )}
-      </div>
-      <button onClick={() => setIsOpened(true)}>Open Mail</button>
+
+          {/* Modal component */}
+          <Modal
+            isOpen={isOpened}
+            onClose={() => setIsOpened(false)}
+            senderName={messageData.senderName}
+            message={messageData.message}
+          />
+        </>
+      )}
     </div>
   );
 }
+
