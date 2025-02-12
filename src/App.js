@@ -7,7 +7,7 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/:id" element={<EnvelopeView />} />
+        <Route path="/id" element={<EnvelopeView />} />
       </Routes>
     </Router>
   );
