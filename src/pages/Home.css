@@ -4,6 +4,9 @@
     align-items: center;
     text-align: center;
     padding: 20px;
+    width: 100%;
+    max-height: 100vh; /* Limits form height to 80% of viewport */
+    overflow-y: auto; /* Enables vertical scrolling */
   }
   
   .logo {
@@ -31,4 +34,3 @@
       border-radius: 20%;
     }
   }
-  

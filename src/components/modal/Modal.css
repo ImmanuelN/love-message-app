@@ -1,4 +1,4 @@
-/* Blur only the background */
+/* Blur background */
 .blur-background {
   position: fixed;
   top: 0;
@@ -6,12 +6,11 @@
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  filter: blur(5px);
-  transition: background 0.3s ease-in-out, filter 0.3s ease-in-out;
+  transition: background 0.3s ease-in-out;
   z-index: 1;
 }
 
-/* Modal pop-up container */
+/* Centered popup */
 .popup {
   position: fixed;
   top: 0;
@@ -22,24 +21,26 @@
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.6);
-  z-index: 1000; /* Ensure modal is above the background */
+  z-index: 1000;
+  overflow: auto; /* Allow scrolling if content overflows */
 }
 
-/* Modal card */
+/* Card container */
 .popup-card {
-  position: relative; /* Use relative position only */
   background: #fff;
-  padding: 20px;
-  border-radius: 2px;
-  width: 100%;
-  max-width: 500px; /* Optional: Adjust as needed */
+  padding: 40px;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%; /* Ensure card is responsive */
+  max-height: 90%; /* Limit card height to 90% of the viewport height */
   text-align: center;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-  transform: scale(0.8);
   animation: fadeIn 0.3s ease-in-out forwards;
-  display: grid;
-  place-items: center;
-  z-index: 1001; /* Ensure modal content stays on top of the background */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow-y: auto; /* Allow vertical scrolling inside the card if needed */
 }
 
 /* Dashed border around the card */
@@ -50,46 +51,171 @@
   left: 10px;
   right: 10px;
   bottom: 10px;
-  border: 2px solid #003049;
-  border-style: dashed;
+  border: 2px dashed #003049;
 }
 
-/* Text inside the modal */
-.popup-card .text {
-  font-family: 'Brush Script MT', cursive;
-  font-size: 28px;
+/* Floating polaroid-style image */
+.image-stack {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.polaroid,
+.polaroid2 {
+  width: 140px;
+  border: 5px solid white;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+  transform: rotate(-5deg);
+  margin: 5px;
+}
+
+/* Adjust rotation for second image */
+.polaroid2 {
+  transform: rotate(5deg);
+}
+
+/* Handwritten styles */
+.text {
+  font-family: "Dancing Script", cursive;
+  font-size: 20px;
+  color: #333;
   text-align: center;
-  line-height: 25px;
+}
+
+.salutation {
+  font-size: 26px;
+  font-weight: bold;
   color: #003049;
 }
 
-/* Smooth pop-up animation */
+.message {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.closing {
+  font-size: 22px;
+  margin-top: 15px;
+  font-style: italic;
+}
+
+/* Fade-in animation */
 @keyframes fadeIn {
   from {
-      opacity: 0;
-      transform: scale(0.8);
+    opacity: 0;
+    transform: scale(0.8);
   }
   to {
-      opacity: 1;
-      transform: scale(1);
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
 /* Close button */
 .close-btn {
-  margin-top: 15px;
+  margin-top: 20px;
   padding: 8px 15px;
   border: none;
-  background: #f08080;
+  background: #d9534f;
   color: white;
   font-size: 16px;
   border-radius: 5px;
   cursor: pointer;
   transition: background 0.3s ease-in-out;
-  z-index: 1002; /* Ensure button is above other elements */
+  z-index: 1001;
 }
 
-/* Button hover effect */
 .close-btn:hover {
-  background: #d9534f;
+  background: #c9302c;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .popup-card {
+    padding: 20px; /* Less padding on smaller screens */
+    max-width: 90%; /* Ensure card fits screen */
+  }
+
+  .polaroid,
+  .polaroid2 {
+    width: 100px; /* Reduce image size on smaller screens */
+    margin: 10px;
+  }
+
+  .salutation {
+    font-size: 22px; /* Smaller salutation font */
+  }
+
+  .message {
+    font-size: 16px; /* Smaller message font */
+  }
+
+  .closing {
+    font-size: 18px; /* Smaller closing font */
+  }
+
+  .close-btn {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .popup-card {
+    padding: 15px;
+  }
+
+  .polaroid,
+  .polaroid2 {
+    width: 80px; /* Further reduce image size */
+  }
+
+  .salutation {
+    font-size: 18px; /* Even smaller salutation font */
+  }
+
+  .message {
+    font-size: 14px; /* Even smaller message font */
+  }
+
+  .closing {
+    font-size: 16px; /* Even smaller closing font */
+  }
+
+  .close-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+}
+
+/* For shorter screen heights (e.g., smartphones in portrait mode) */
+@media (max-height: 600px) {
+  .popup-card {
+    max-height: 80%; /* Limit the max height of the modal */
+    padding: 15px;
+  }
+
+  .close-btn {
+    margin-top: 10px; /* Adjust the button position */
+  }
+
+  .image-stack {
+    margin-bottom: 10px;
+  }
+
+  .text {
+    font-size: 18px; /* Adjust text size for small height */
+  }
+
+  .salutation {
+    font-size: 22px; /* Adjust salutation font size */
+  }
+
+  .message {
+    font-size: 14px; /* Adjust message font size */
+  }
+
+  .closing {
+    font-size: 16px; /* Adjust closing font size */
+  }
 }

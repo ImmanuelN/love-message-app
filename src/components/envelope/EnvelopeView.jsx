@@ -12,6 +12,10 @@ export default function EnvelopeView() {
     senderName: "",
     senderEmail: "",
     message: "",
+    receipientName: "",
+    conclusion: "",
+    url: "",
+    url2: "",
   });
 
   useEffect(() => {
@@ -19,7 +23,6 @@ export default function EnvelopeView() {
       try {
         const docRef = doc(db, "messages", id);
         const docSnap = await getDoc(docRef);
-
         if (docSnap.exists()) {
           setMessageData(docSnap.data());
         } else {
@@ -27,6 +30,10 @@ export default function EnvelopeView() {
             senderName: "",
             senderEmail: "",
             message: "Message not found!",
+            receipientName: "",
+            conclusion: "",
+            url: "",
+            url2: "",
           });
         }
       } catch (error) {
@@ -35,6 +42,10 @@ export default function EnvelopeView() {
           senderName: "",
           senderEmail: "",
           message: "Error loading message.",
+          receipientName: "",
+          conclusion: "",
+          url: "",
+          url2: "",
         });
       } finally {
         setLoading(false);
@@ -74,11 +85,14 @@ export default function EnvelopeView() {
             isOpen={isOpened}
             onClose={() => setIsOpened(false)}
             senderName={messageData.senderName}
+            receipientName={messageData.receipientName}
             message={messageData.message}
+            conclusion={messageData.conclusion}
+            url={messageData.url}
+            url2={messageData.url2}
           />
         </>
       )}
     </div>
   );
 }
-
