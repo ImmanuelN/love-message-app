@@ -57,6 +57,7 @@ export default function EnvelopeView() {
 
   return (
     <div className="container">
+      
       {loading ? (
         <p className="highlight">Mail incoming...</p>
       ) : (
