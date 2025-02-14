@@ -1,7 +1,6 @@
 import MessageForm from "../components/MessageForm";
 import "./Home.css";
 import logo from "../components/img/logo.png";
-import Navbar from "../components/navbar/Navbar";
 
 export default function Home() {
   return (
