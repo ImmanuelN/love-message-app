@@ -85,6 +85,7 @@ export default function EnvelopeView() {
             isOpen={isOpened}
             onClose={() => setIsOpened(false)}
             senderName={messageData.senderName}
+            senderEmail={messageData.senderEmail}
             receipientName={messageData.receipientName}
             message={messageData.message}
             conclusion={messageData.conclusion}

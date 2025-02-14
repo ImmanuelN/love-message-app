@@ -4,6 +4,7 @@ export default function Modal({
   isOpen,
   onClose,
   senderName,
+  senderEmail,
   receipientName,
   message,
   conclusion,
@@ -11,6 +12,15 @@ export default function Modal({
   url2,
 }) {
   if (!isOpen) return null; // Don't render if modal is closed
+
+  // Function to open email app
+  const handleReply = () => {
+    if (senderEmail) {
+      const subject = encodeURIComponent(`Reply to your SoulScript message`);
+      const body = encodeURIComponent(`Hi ${senderName},\n\n`);
+      window.location.href = `mailto:${senderEmail}?subject=${subject}&body=${body}`;
+    }
+  };
 
   return (
     <>
@@ -30,15 +40,23 @@ export default function Modal({
             <p className="salutation">Dearest {receipientName},</p>
             <p className="message">{message}</p>
             <p className="closing">
-              {conclusion}<br />
+              {conclusion}
+              <br />
               <strong>{senderName}</strong>
             </p>
           </div>
 
-          {/* Close button */}
-          <button className="close-btn" onClick={onClose}>
-            Close
-          </button>
+          {/* Buttons Container */}
+          <div className="button-container">
+            {senderEmail && (
+              <button className="reply-button" onClick={handleReply}>
+                Reply to {senderName}
+              </button>
+            )}
+            <button className="close-btn" onClick={onClose}>
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </>
