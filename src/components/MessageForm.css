@@ -1,95 +1,198 @@
+/* 🌸 Soft Romantic Form Styling */
 .form-container {
   max-width: 90%;
-  width: 400px;
-  margin: 5vh auto;
-  padding: 20px;
-  background: #fff5f5;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 420px;
+  margin: 6vh auto;
+  padding: 24px;
+  background: #fff0f3;
+  border-radius: 16px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
   text-align: center;
   transition: all 0.3s ease-in-out;
 }
 
+/* 💌 Heading Styling */
 h2 {
-  color: #d9534f;
-  font-size: 22px;
-  margin-bottom: 15px;
+  color: #c92a2a;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 18px;
+  text-transform: capitalize;
+  font-family: "Poppins", sans-serif;
 }
 
+/* 📝 Form Layout */
 .message-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
   align-items: center;
 }
 
+/* ✏️ Input Fields */
 input,
 textarea {
   width: 100%;
   max-width: 380px;
-  padding: 12px;
-  border: 2px solid #f08080;
-  border-radius: 8px;
+  padding: 14px;
+  border: 2px solid #ffb3c1;
+  border-radius: 10px;
   font-size: 16px;
   outline: none;
   transition: 0.2s ease-in-out;
+  background: #fff8f9;
+  font-family: "Poppins", sans-serif;
 }
 
+/* Checkbox Styling */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #c92a2a;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 8px;
+  font-family: "Poppins", sans-serif;
+}
+
+.checkbox-label input {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  cursor: pointer;
+  accent-color: #e63946;
+  transform: scale(1.1);
+}
+
+/* Image Upload Section */
+.image-upload-container {
+  display: block;  /* Make container block-level so buttons stack below */
+  align-items: flex-start;
+  margin-bottom: 10px;  /* Add some space between fields */
+}
+
+.remove-image-btn {
+  display: block;  /* Ensures the button takes up full width */
+  margin-top: 8px;  /* Add space between image and button */
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 5px;
+  width: 100%;  /* Make button width same as input field */
+}
+
+.remove-image-btn:hover {
+  background-color: darkred;
+}
+
+/* ✨ Focus Effects */
 input:focus,
 textarea:focus {
-  border-color: #d9534f;
-  background: #ffe6e6;
+  border-color: #e63946;
+  background: #ffe6e9;
+  box-shadow: 0 0 8px #e639464d;
 }
 
+/* 🔥 Special Styling for Textarea */
 textarea {
   resize: none;
   height: 120px;
 }
 
-label {
-  font-size: 16px;
+.input-group {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  max-width: 400px;
 }
 
+.input-group input {
+  flex: 1;
+}
+
+/* 🏷️ Label Styling */
+label {
+  font-size: 16px;
+  color: #c92a2a;
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+}
+
+/* 🎀 Send Button */
 .send-button {
   width: 100%;
   max-width: 380px;
-  background: #d9534f;
+  background: linear-gradient(to right, #ff4d6d, #e63946);
   color: white;
-  padding: 14px;
+  padding: 15px;
   font-size: 18px;
+  font-weight: bold;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   transition: 0.3s ease-in-out;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .send-button:hover {
-  background: #c9302c;
+  background: linear-gradient(to right, #e63946, #c92a2a);
+  transform: scale(1.03);
 }
 
+/* 🚫 Disabled Button */
 .send-button:disabled {
-  background: #e57373;
+  background: #ffb3c1;
   cursor: not-allowed;
 }
 
+/* ✅ Success Message */
 .success-message {
-  color: #28a745;
+  color: #198754;
   font-size: 16px;
-  margin-top: 10px;
+  margin-top: 12px;
+  font-weight: 500;
 }
 
 /* 📌 Responsive Scaling */
 @media (max-width: 600px) {
   .form-container {
     width: 85%;
-    padding: 15px;
+    padding: 18px;
   }
 
   input,
   textarea,
   .send-button {
     font-size: 15px;
+    padding: 12px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 500px) {
+  .form-container {
+    width: 80%;
+    padding: 14px;
+  }
+
+  input,
+  textarea {
+    font-size: 14px;
     padding: 10px;
+    width: 90%;
+  }
+
+  .send-button {
+    font-size: 16px;
+    padding: 14px;
   }
 
   h2 {
@@ -97,65 +200,42 @@ label {
   }
 }
 
-@media (max-width: 500px) {
-  .form-container {
-    width: 80%;
-    padding: 12px;
-  }
-
-  input,
-  textarea {
-    font-size: 14px;
-    padding: 9px;
-    width: 90%;
-  }
-
-  .send-button {
-    font-size: 16px;
-    padding: 12px;
-  }
-
-  h2 {
-    font-size: 18px;
-  }
-}
-
 @media (max-width: 400px) {
   .form-container {
     width: 75%;
-    padding: 10px;
+    padding: 12px;
   }
 
   input,
   textarea {
     font-size: 13px;
-    padding: 8px;
+    padding: 9px;
   }
 
   .send-button {
     font-size: 15px;
-    padding: 10px;
+    padding: 12px;
   }
 }
 
 @media (max-width: 350px) {
   .form-container {
     width: 70%;
-    padding: 8px;
+    padding: 10px;
   }
 
   h2 {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   input,
   textarea {
     font-size: 12px;
-    padding: 7px;
+    padding: 8px;
   }
 
   .send-button {
     font-size: 14px;
-    padding: 8px;
+    padding: 10px;
   }
 }
