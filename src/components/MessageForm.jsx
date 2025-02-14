@@ -17,6 +17,7 @@ const MessageForm = () => {
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [id, setId] = useState();
 
   // Handle text input changes
   const handleChange = (e) => {
@@ -42,6 +43,7 @@ const MessageForm = () => {
       });
 
       console.log("Message stored with ID:", docRef.id);
+      setId(docRef.id);
 
       // Call email function
       const response = await fetch("/.netlify/functions/sendEmail", {
@@ -133,19 +135,28 @@ const MessageForm = () => {
           onChange={handleChange}
           required
         />
-        <label>
-          Upload Pictures
-        </label>
+        <label>Upload Pictures</label>
 
         {/* Image Upload Fields using ImageUpload Component */}
-        <ImageUpload onUpload={(url) => handleImageUpload(url, "url")} label/>
-        <ImageUpload onUpload={(url) => handleImageUpload(url, "url2")} label/>
+        <ImageUpload onUpload={(url) => handleImageUpload(url, "url")} label />
+        <ImageUpload onUpload={(url) => handleImageUpload(url, "url2")} label />
 
         <button type="submit" disabled={loading} className="send-button">
           {loading ? "Sending..." : "Send Message"}
         </button>
       </form>
-      {success && <p className="success-message">✅ Message sent successfully!</p>}
+      {success && (
+        <p className="success-message">
+          ✅ Message sent successfully! View the Message Here:
+          <a
+            href={`https://crash0ut-mail-app.netlify.app/${id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Click here to view
+          </a>
+        </p>
+      )}
     </div>
   );
 };
