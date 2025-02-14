@@ -11,6 +11,7 @@ export default function Modal({
   conclusion,
   url,
   url2,
+  canReply, // Receive the canReply prop
 }) {
   const navigate = useNavigate(); // Initialize useNavigate
 
@@ -56,14 +57,16 @@ export default function Modal({
 
           {/* Buttons Container */}
           <div className="button-container">
-            {senderEmail && (
-              <button className="reply-button" onClick={handleReply}>
-                Reply via email
-              </button>
+            {canReply && senderEmail && (  // Conditionally render buttons based on canReply
+              <>
+                <button className="reply-button" onClick={handleReply}>
+                  Reply via email
+                </button>
+                <button className="reply-button" onClick={handleNavigate}>
+                  Reply via SoulScript
+                </button>
+              </>
             )}
-            <button className="reply-button" onClick={handleNavigate}>
-              Reply via SoulScript
-            </button>
             <button className="close-btn" onClick={onClose}>
               Close
             </button>

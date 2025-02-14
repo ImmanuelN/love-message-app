@@ -14,6 +14,7 @@ export default function EnvelopeView() {
     message: "",
     receipientName: "",
     conclusion: "",
+    canReply: false,
     url: "",
     url2: "",
   });
@@ -32,6 +33,7 @@ export default function EnvelopeView() {
             message: "Message not found!",
             receipientName: "",
             conclusion: "",
+            canReply: false,
             url: "",
             url2: "",
           });
@@ -44,6 +46,7 @@ export default function EnvelopeView() {
           message: "Error loading message.",
           receipientName: "",
           conclusion: "",
+          canReply: false,
           url: "",
           url2: "",
         });
@@ -90,6 +93,7 @@ export default function EnvelopeView() {
             receipientName={messageData.receipientName}
             message={messageData.message}
             conclusion={messageData.conclusion}
+            canReply={messageData.canReply}
             url={messageData.url}
             url2={messageData.url2}
           />
