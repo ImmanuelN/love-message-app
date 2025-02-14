@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 import "./Modal.css";
 
 export default function Modal({
@@ -11,6 +12,8 @@ export default function Modal({
   url,
   url2,
 }) {
+  const navigate = useNavigate(); // Initialize useNavigate
+
   if (!isOpen) return null; // Don't render if modal is closed
 
   // Function to open email app
@@ -20,6 +23,11 @@ export default function Modal({
       const body = encodeURIComponent(`Hi ${senderName},\n\n`);
       window.location.href = `mailto:${senderEmail}?subject=${subject}&body=${body}`;
     }
+  };
+
+  // Function to navigate to home page
+  const handleNavigate = () => {
+    navigate("/"); // Navigate to the home page
   };
 
   return (
@@ -50,9 +58,12 @@ export default function Modal({
           <div className="button-container">
             {senderEmail && (
               <button className="reply-button" onClick={handleReply}>
-                Reply to {senderName}
+                Reply via email
               </button>
             )}
+            <button className="reply-button" onClick={handleNavigate}>
+              Reply via SoulScript
+            </button>
             <button className="close-btn" onClick={onClose}>
               Close
             </button>
